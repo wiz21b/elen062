@@ -7,7 +7,7 @@ from data.plot import plot_boundary
 
 
 LEARNING_SET_SIZE=250
-TEST_SET_SIZE=250
+TEST_SET_SIZE=10000
 
 LS_DATA = [ make_data1( LEARNING_SET_SIZE, random_state=1000),
             make_data2( LEARNING_SET_SIZE, random_state=1000) ]
@@ -32,7 +32,7 @@ for prob_ndx in range( len( LS_DATA)):
         clf = DecisionTreeClassifier( max_depth= depth )
         clf = clf.fit(inputs_ls, outputs_ls)
 
-        plot_boundary( f"p{p_ndx}_depth{depth}", clf, inputs_ls, outputs_ls, title=f"Problem {p_ndx}, depth {depth}")
+        #plot_boundary( f"p{p_ndx}_depth{depth}", clf, inputs_ls, outputs_ls, title=f"Problem {p_ndx}, depth {depth}")
 
         # plot_tree(clf, filled=True)
         # plt.show()
@@ -42,4 +42,9 @@ for prob_ndx in range( len( LS_DATA)):
         outputs_ts = test_set[1]
         predictions = clf.predict( inputs_ts)
 
-        print( "{} \t Success rate {}%".format( f"Problem {p_ndx}, depth {depth}", 100.0 * np.sum( outputs_ts == predictions) / len(outputs_ts) ))
+        ts_success_rate = 100.0 * np.sum( outputs_ts == predictions) / len(outputs_ts)
+
+        predictions_ls = clf.predict( inputs_ls)
+        ls_success_rate = 100.0 * np.sum( outputs_ls == predictions) / len(outputs_ts)
+
+        print( "{} \t Success rate LS : {}\t Success rate TS : {}%".format( f"Problem {p_ndx}, depth {depth}", ls_success_rate, ts_success_rate ))

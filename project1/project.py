@@ -45,6 +45,6 @@ for prob_ndx in range( len( LS_DATA)):
         ts_success_rate = 100.0 * np.sum( outputs_ts == predictions) / len(outputs_ts)
 
         predictions_ls = clf.predict( inputs_ls)
-        ls_success_rate = 100.0 * np.sum( outputs_ls == predictions) / len(outputs_ts)
+        ls_success_rate = 100.0 * np.sum( outputs_ls == predictions_ls) / len(outputs_ls)
 
-        print( "{} \t Success rate LS : {}\t Success rate TS : {}%".format( f"Problem {p_ndx}, depth {depth}", ls_success_rate, ts_success_rate ))
+        print( "{} \t Success rate LS : {}%\t Success rate TS : {}%".format( f"Problem {p_ndx}, depth {depth}", ls_success_rate, ts_success_rate ))

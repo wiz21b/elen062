@@ -32,7 +32,7 @@ for prob_ndx in range( len( LS_DATA)):
         clf = DecisionTreeClassifier( max_depth= depth )
         clf = clf.fit(inputs_ls, outputs_ls)
 
-        # plot_boundary( f"p{p_ndx}_depth{depth}", clf, inputs_ls, outputs_ls, title=f"Problem {p_ndx}, depth {depth}")
+        plot_boundary( f"p{p_ndx}_depth{depth}", clf, inputs_ls, outputs_ls, title=f"Problem {p_ndx}, depth {depth}")
 
         # plot_tree(clf, filled=True)
         # plt.show()

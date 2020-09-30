@@ -8,18 +8,17 @@ from data.plot import plot_boundary
 
 LEARNING_SET_SIZE=250
 TEST_SET_SIZE=10000
-
-
+DEPTHS = [1,2,4,8,None]
 FUNCS = [make_data1, make_data2]
 
 for prob_ndx in range( len( FUNCS)):
 
-    p_ndx = prob_ndx + 1
+    p_ndx = prob_ndx + 1 # python counts from 0 :-)
 
     print(f"Generating problem {p_ndx}")
+
     inputs_ls, outputs_ls, inputs_ts, outputs_ts = FUNCS[prob_ndx](TEST_SET_SIZE, LEARNING_SET_SIZE, random_state=1000)
 
-    DEPTHS = [1,2,4,8,None]
 
     for depth in DEPTHS:
 

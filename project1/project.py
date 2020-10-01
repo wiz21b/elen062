@@ -23,7 +23,7 @@ def dec_tree(seed):
                 clf = DecisionTreeClassifier( max_depth= depth )
                 clf = clf.fit(inputs_ls, outputs_ls)
         
-                #plot_boundary( f"p{p_ndx}_depth{depth}", clf, inputs_ls, outputs_ls, title=f"Problem {p_ndx}, depth {depth}")
+                #plot_boundary( f"plots/dec_tree/p{p_ndx}_depth{depth}", clf, inputs_ls, outputs_ls, title=f"Problem {p_ndx}, depth {depth}")
         
                 # plot_tree(clf, filled=True)
                 # plt.show()
@@ -63,10 +63,10 @@ def nneighbor(seed):
             neigh = KNeighborsClassifier(n_neighbors=number)
             neigh.fit(inputs_ls,outputs_ls)
             predictions = neigh.predict(inputs_ts)
-            #plot_boundary(f"p{p_ndx}_#neighbors{number}",neigh, inputs_ls, outputs_ls, title=f"Problem {p_ndx}, #neighbors {number}")
-            #plt.show()
+            plot_boundary(f"plots/neighbors/p{p_ndx}_#neighbors{number}",neigh, inputs_ls, outputs_ls, title=f"Problem {p_ndx}, #neighbors {number}")
+            plt.show()
 
-def cross_validation(k):
+#def cross_validation(k):
     
 
 

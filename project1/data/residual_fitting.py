@@ -91,5 +91,5 @@ class residual_fitting(BaseEstimator, ClassifierMixin):
         pass
 
 if __name__ == "__main__":
-    from data import make_data1,make_data2
+    from data import make_data
     from plot import plot_boundary, plot_boundary_extended

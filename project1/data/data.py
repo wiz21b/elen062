@@ -171,7 +171,7 @@ def make_data1_(n_points, random_state=None):
     y : array of shape [n_samples]
         The output values.
     """
-    return make_circles(n_points, random_state=0)
+    return make_circles(n_points, random_state=random_state)
 
 def make_data2_(n_points, random_state=None):
     """Generate a dataset of two perpendicular ellipses rotated by 45 degrees

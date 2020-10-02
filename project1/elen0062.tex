@@ -131,6 +131,11 @@ None & 0.0\% & 14.85\% & Overfit \\
 \end{table}
 
 
+\subsubsection{Model confidence}
+
+For problem 1, the model becomes more confident for the obvious reason that it's boundary becomes more adapted to the problem.
+
+For problem 2, it's less obvious. The model improves with depth up to depth 8 as it can split the space in distinct parts, that fits the greater number of point. However, at unconstraint depth, it can't sort out the intersection between the ellipses and tends to over fit (see above). So we'd say that although it's globally improving, it does become more instable locally.
 
 	
 

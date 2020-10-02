@@ -86,6 +86,7 @@ def plot_boundary(fname, fitted_estimator, X, y, mesh_step_size=0.1, title="", i
         plt.ylim(yy.min(), yy.max())
 
         plt.savefig("{}.pdf".format(fname))
+        plt.savefig("{}.svg".format(fname))
 
     finally:
         if inline_plotting:

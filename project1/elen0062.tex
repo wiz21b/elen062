@@ -1,0 +1,180 @@
+\documentclass{article}
+\usepackage{subfig}
+\usepackage{placeins}
+\usepackage[utf8]{inputenc}
+
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{enumitem}
+
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage[margin=3cm]{geometry}
+ \usepackage{bbold}
+
+\usepackage{svg}
+\begin{document}
+
+
+% ==============================================================================
+
+\title{\Large{ELEN0062: Project 1 - Report}}
+\vspace{1cm}
+\author{\small{\bf Stéphane Champailler - s912550 } \\ \small{\bf Christian Fiedler}}
+
+
+%\\ \small{\bf Miss Pacman - s222222}}
+
+\maketitle
+
+% ==============================================================================
+
+\def\picwidth{7cm}
+
+\section{Decision tree}
+\subsection{Decision boundary and tree depth}
+\subsubsection{Decision boundary and tree depth}
+
+When looking at the way the boundary changes with the depth in problem 1 (see figure \ref{boundary1}, we see :
+\begin{enumerate}
+\item Depth 1 : the boundary shape is too simple to actually represent the data in any meaningful way
+\item Depth 2 : The boundary shape fits the red dots quite well, but there are still some blue dots that are classified wrongly.
+\item Depth 4 : the boundary classifies most of the points correctly. Which seems normal since a tree of depth 4 can cut the space 4 times, making a 4-sided boundary.
+\item Depth 8 and None : the boundary doesn't improve anymore.
+\end{enumerate}
+
+
+When looking at the way the boundary changes with the depth in problem 2 (see figure \ref{boundary2}, we see :
+\begin{enumerate}
+\item Depth 1 : the boundary shape is too simple to actually represent the data in any meaningful way.
+\item Depth 2 : idem
+\item Depth 4 : idem
+\item Depth 8 : idem
+\item Depth None : the boundary is much better but tends to overfit
+\end{enumerate}
+
+For the figure 2, overfitting and misclassification are expected. That's because the intersections between the two
+ellipses are hard to classify and introduce instabilities.
+
+
+
+
+\begin{figure}[htbp]
+  \centering
+  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p1_depth1.svg}}
+  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p1_depth2.svg}}
+
+  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p1_depth4.svg}}
+  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p1_depth8.svg}}
+
+  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p1_depthNone.svg}}
+  
+  \caption{\label{boundary1}Decision boundary problem 1}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p2_depth1.svg}}
+  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p2_depth2.svg}}
+
+  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p2_depth4.svg}}
+  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p2_depth8.svg}}
+  
+  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p2_depthNone.svg}}
+
+  \caption{\label{boundary2}Decision boundary problem 1}
+\end{figure}
+\FloatBarrier
+
+
+\subsubsection{Overfitting and underfitting}
+
+We assess :
+\begin{enumerate}
+\item Overfitting : if error rate on learning set is small compared to error rate on test set
+\item Underfitting : if error rate on learning set is high
+\end{enumerate}
+
+So we have the following results (see tables \ref{overfitting1} and \ref{overfitting2}).
+
+\begin{table}[h]
+  \centering
+	\begin{tabular}{l|r|r|l} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+	      \textbf{Depth} & \textbf{Learning set} & \textbf{Test set} & \textbf{Overfit} \\
+	      \hline
+	      1 & 26.8\% & 28.94\% & Underfit \\
+2 & 5.6\% & 7.27\% & - \\
+4 & 0.0\% & 0.66\% & - \\
+8 & 0.0\% & 0.66\% & - \\
+None & 0.0\% & 0.66\% & - \\
+	\end{tabular}
+  \caption{\label{overfitting1}Overfitting for problem 1}
+\end{table}
+	
+\begin{table}[h]
+  \centering
+	\begin{tabular}{l|r|r|l} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+	      \textbf{Depth} & \textbf{Learning set} & \textbf{Test set} & \textbf{Overfit} \\
+	      \hline
+    1 & 47.2\% & 49.95\% & Underfit \\
+2 & 45.2\% & 49.46\% & Underfit \\
+4 & 15.2\% & 21.61\% & Underfit \\
+8 & 5.2\% & 18.52\% & Overfit \\
+None & 0.0\% & 14.85\% & Overfit \\
+
+	\end{tabular}
+  \caption{\label{overfitting2}Overfitting for problem 2}
+\end{table}
+
+
+
+	
+
+\subsection{Test set accuracies over 5 generations}
+
+We give the mean error rates and accomanying standard deviations for both problems at various depths. These are computed over 5 different sets of test data.
+
+\begin{table}[h]
+  \centering
+\subfloat[Problem 1]{
+	\begin{tabular}{l|c|r} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+	      \textbf{Depth} & \textbf{Mean} & \textbf{Std dev}\\
+	      \hline
+	      1 & 28.75 & 0.24 \\
+2 & 7.19 & 0.12 \\
+4 & 0.61 & 0.05 \\
+8 & 0.61 & 0.05 \\
+None & 0.61 & 0.05 \\
+	      
+	\end{tabular}}
+\subfloat[Problem 2]{
+	\begin{tabular}{l|c|r} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+	      \textbf{Depth} & \textbf{Mean} & \textbf{Std dev}\\
+	      \hline
+	      1 & 50.01 & 0.10 \\
+2 & 49.82 & 0.32 \\
+4 & 21.66 & 0.15 \\
+8 & 18.56 & 0.49 \\
+None & 14.76 & 0.22 \\
+	\end{tabular}}
+  \caption{\label{tbl_errors}Comparing mean and std dev. of error rates on both problems}
+\end{table}
+
+We conclude that problem 1's tree stabilizes from depth 4 on. For problem 2, the tree improves but continue to make a significant number of errors (see mean). Also, the standard deviation doesn't decrease with depth. Which means that the tree doesn't stabilize.
+
+\subsection{Comparing problems one and two}
+
+Considering the information above, we can say that the problem1 is much easier to deal with  a decision tree. The mean and std dev. of error rate converge towards 0 as depth increases, without much overfitting.
+That's because the positions of the two set of points are clearly separated and their relative positions and shapes allow for a boundary to be built by sequentially dividing the space along orthogonal lines. 
+
+Problem 2 is not good for a decision tree because the two sets of points overlap in some area. The mean never gets close to zero (even at  unconstrainted depth) and std dev. of error rate doesn't converge towards 0 as depth increases. Moreovoer overfitting occurs.
+
+
+
+% ==============================================================================
+
+\end{document}

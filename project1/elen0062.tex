@@ -33,7 +33,7 @@
 
 % ==============================================================================
 
-\def\picwidth{7cm}
+\def\picwidth{8cm}
 
 \section{Decision tree}
 \subsection{Decision boundary and tree depth}
@@ -65,28 +65,30 @@ ellipses are hard to classify and introduce instabilities.
 
 \begin{figure}[htbp]
   \centering
-  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p1_depth1.svg}}
-  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p1_depth2.svg}}
-
-  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p1_depth4.svg}}
-  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p1_depth8.svg}}
-
-  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p1_depthNone.svg}}
   
-  \caption{\label{boundary1}Decision boundary problem 1}
+  \subfloat{   \includegraphics[width=\picwidth]{plots/dec_tree/p1_depth1.pdf}}
+  \subfloat{   \includegraphics[width=\picwidth]{plots/dec_tree/p1_depth2.pdf}}
+  
+  \subfloat{   \includegraphics[width=\picwidth]{plots/dec_tree/p1_depth4.pdf}}
+  \subfloat{   \includegraphics[width=\picwidth]{plots/dec_tree/p1_depth8.pdf}}
+  
+  \subfloat{   \includegraphics[width=\picwidth]{plots/dec_tree/p1_depthNone.pdf}}
+  
+  
+  \caption{\label{boundary1}Decision boundaries problem 1}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p2_depth1.svg}}
-  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p2_depth2.svg}}
+  \subfloat{ \includegraphics[width=\picwidth]{plots/dec_tree/p2_depth1.pdf}}
+  \subfloat{ \includegraphics[width=\picwidth]{plots/dec_tree/p2_depth2.pdf}}
 
-  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p2_depth4.svg}}
-  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p2_depth8.svg}}
+  \subfloat{ \includegraphics[width=\picwidth]{plots/dec_tree/p2_depth4.pdf}}
+  \subfloat{ \includegraphics[width=\picwidth]{plots/dec_tree/p2_depth8.pdf}}
   
-  \subfloat{ \includesvg[width=\picwidth]{plots/dec_tree/p2_depthNone.svg}}
+  \subfloat{ \includegraphics[width=\picwidth]{plots/dec_tree/p2_depthNone.pdf}}
 
-  \caption{\label{boundary2}Decision boundary problem 1}
+  \caption{\label{boundary2}Decision boundaries problem 2}
 \end{figure}
 \FloatBarrier
 
@@ -103,7 +105,7 @@ So we have the following results (see tables \ref{overfitting1} and \ref{overfit
 
 \begin{table}[h]
   \centering
-	\begin{tabular}{l|r|r|l} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+	\begin{tabular}{rrrl}
 	      \textbf{Depth} & \textbf{Learning set} & \textbf{Test set} & \textbf{Overfit} \\
 	      \hline
 	      1 & 26.8\% & 28.94\% & Underfit \\
@@ -117,7 +119,7 @@ None & 0.0\% & 0.66\% & - \\
 	
 \begin{table}[h]
   \centering
-	\begin{tabular}{l|r|r|l} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+	\begin{tabular}{rrrl}
 	      \textbf{Depth} & \textbf{Learning set} & \textbf{Test set} & \textbf{Overfit} \\
 	      \hline
     1 & 47.2\% & 49.95\% & Underfit \\
@@ -146,7 +148,7 @@ We give the mean error rates and accomanying standard deviations for both proble
 \begin{table}[h]
   \centering
 \subfloat[Problem 1]{
-	\begin{tabular}{l|c|r} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+	\begin{tabular}{rcr}
 	      \textbf{Depth} & \textbf{Mean} & \textbf{Std dev}\\
 	      \hline
 	      1 & 28.75 & 0.24 \\
@@ -157,7 +159,7 @@ None & 0.61 & 0.05 \\
 	      
 	\end{tabular}}
 \subfloat[Problem 2]{
-	\begin{tabular}{l|c|r} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+	\begin{tabular}{rcr}
 	      \textbf{Depth} & \textbf{Mean} & \textbf{Std dev}\\
 	      \hline
 	      1 & 50.01 & 0.10 \\

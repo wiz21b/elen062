@@ -24,7 +24,7 @@
 
 \title{\Large{ELEN0062: Project 1 - Report}}
 \vspace{1cm}
-\author{\small{\bf Stéphane Champailler - s912550 } \\ \small{\bf Christian Fiedler}}
+\author{\small{\bf Stéphane Champailler - s912550 } \\ \small{\bf Christian Fiedler - s204358}}
 
 
 %\\ \small{\bf Miss Pacman - s222222}}
@@ -180,7 +180,86 @@ That's because the positions of the two set of points are clearly separated and 
 
 Problem 2 is not good for a decision tree because the two sets of points overlap in some area. The mean never gets close to zero (even at  unconstrainted depth) and std dev. of error rate doesn't converge towards 0 as depth increases. Moreovoer overfitting occurs.
 
+\section{K-nearest neighbors}
 
+
+\subsection{Decision Boundaries}
+\subsubsection{Boundaries}
+	\begin{figure}[htbp]
+		\centering
+		
+		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p1_neighbors1.pdf}}
+		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p1_neighbors5.pdf}}
+		
+		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p1_neighbors10.pdf}}
+		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p1_neighbors75.pdf}}
+		
+		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p1_neighbors100.pdf}}
+		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p1_neighbors150.pdf}}
+		
+		
+		\caption{\label{boundary2.3p1}Decision boundaries problem 1}
+	\end{figure}
+	\begin{figure}[htbp]
+		\centering
+		
+		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p2_neighbors1.pdf}}
+		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p2_neighbors5.pdf}}
+		
+		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p2_neighbors10.pdf}}
+		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p2_neighbors75.pdf}}
+		
+		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p2_neighbors100.pdf}}
+		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p2_neighbors150.pdf}}
+		
+		
+		\caption{\label{boundary2.3p2}Decision boundaries problem 2}
+		
+	\end{figure}
+
+\subsubsection{Comment}
+The decision boundary for data set one seems to be quite good even for one neighbor. That is probably due to the fact that the two classes are neatly seperated in different regions. With a growing number of neighbors the boundary starts getting wider and therefore adding uncertainty to the classification. \\
+The same is true for the second data set. The more neighbors are used the more uncertain the prediction becomes.
+
+\subsection{Five-Fold Cross Validation}
+
+\begin{enumerate}
+	\item We began by partitioning the data set into five distinct subsets. That was achieved by randomly shuffling the original data and then choosing the first 2000 elements in upcoming order for every subset. For every possible number of neighbors we then did the following procedure:
+	\begin{itemize}
+		\item Choose one subset
+		\item Learn the model on the other subsets
+		\item Compute the accuracy of the predictions on chosen subset
+		\item Iterate over all subsets and then compute the mean of the accuracies.
+	\end{itemize}
+	Afterwards we selected the number of neighbors that achieved the highest mean accuracy over the five subsets.
+	\item
+	The optimal value for the neighbors is 5 and the mean of the accuracies 16.84\%. Just by looking at the plotted decision boundaries for the learning set in section 2.1 we would have expected to see 1 as the optimal value. 
+\end{enumerate}
+
+\subsection{Optimal Value of Neighbors with respect to LS Size}
+\subsubsection{Plots}
+		\begin{figure}[hhtbp]
+		\centering
+		
+		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/2.2/p1_neighbors150_ls50.png}}
+		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/2.2/p1_neighbors150_ls200.png}} \\
+			\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/2.2/p1_neighbors150_ls250.png}}
+				\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/2.2/p1_neighbors150_ls500.png}}
+				
+		
+		\caption{\label{acc2.3p1}Test Set Accuracies Problem 1}
+		
+	\end{figure}
+	\begin{figure}[htbp]
+	\centering
+	\subfloat{\includegraphics[width=\picwidth]{plots/neighbors/2.2/p2_neighbors150_ls50.png}}
+	\subfloat{\includegraphics[width=\picwidth]{plots/neighbors/2.2/p2_neighbors150_ls200.png}} \\
+	\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/2.2/p2_neighbors150_ls250.png}}
+	\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/2.2/p2_neighbors150_ls500.png}}
+	
+	\caption{\label{acc2.3p2}Test Set Accuracies Problem 2}
+	
+\end{figure}
 
 % ==============================================================================
 

@@ -8,7 +8,7 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{enumitem}
-
+\usepackage{float}
 \usepackage{bm}
 \usepackage{graphicx}
 \usepackage{color}
@@ -185,7 +185,7 @@ Problem 2 is not good for a decision tree because the two sets of points overlap
 
 \subsection{Decision Boundaries}
 \subsubsection{Boundaries}
-	\begin{figure}[htbp]
+	\begin{figure}[H]
 		\centering
 		
 		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p1_neighbors1.pdf}}
@@ -200,7 +200,7 @@ Problem 2 is not good for a decision tree because the two sets of points overlap
 		
 		\caption{\label{boundary2.3p1}Decision boundaries problem 1}
 	\end{figure}
-	\begin{figure}[htbp]
+	\begin{figure}[H]
 		\centering
 		
 		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p2_neighbors1.pdf}}
@@ -238,7 +238,7 @@ The same is true for the second data set. The more neighbors are used the more u
 
 \subsection{Optimal Value of Neighbors with respect to LS Size}
 \subsubsection{Plots}
-		\begin{figure}[hhtbp]
+		\begin{figure}[H]
 		\centering
 		
 		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/2.2/p1_neighbors150_ls50.png}}
@@ -250,7 +250,7 @@ The same is true for the second data set. The more neighbors are used the more u
 		\caption{\label{acc2.3p1}Test Set Accuracies Problem 1}
 		
 	\end{figure}
-	\begin{figure}[htbp]
+	\begin{figure}[H]
 	\centering
 	\subfloat{\includegraphics[width=\picwidth]{plots/neighbors/2.2/p2_neighbors150_ls50.png}}
 	\subfloat{\includegraphics[width=\picwidth]{plots/neighbors/2.2/p2_neighbors150_ls200.png}} \\
@@ -260,7 +260,18 @@ The same is true for the second data set. The more neighbors are used the more u
 	\caption{\label{acc2.3p2}Test Set Accuracies Problem 2}
 	
 \end{figure}
-
+\begin{figure}[H]
+	\centering
+\includegraphics[width=\picwidth]{plots/neighbors/2.3/optimal_values.pdf}
+	\caption{\label{acc2.3p2}Optimal number of neighbors}
+	
+\end{figure}
+\subsubsection{Comment}
+For the first data set, regardless of the size of the learning set, we observe that one neighbor produces the best accuracy. As the number of neighbors increases, the accuracy slightly increases. However, when 150 neighbors are used the error rate is considerably higher than in the other cases. \\
+For the first three choices of the neighbors, the second data set is fitted quite nicely. The optimal number of neighbors depends on the actual size of the learning set, but it is always found among the three smallest number of neighbors. Starting from 75 neighbors, the error rate rises drastically and peaks at 150 neighbors.
+\subsection{Last Question}
+We don't think using cross validation is a good strategy for data set one because the achieved error rate among the three best choices does not differ by much. Therefore you can almost arbitrarily choose one of the three lowest numbers of neighbors and get an optimal result. \\
+In the case of data set 2, however, a cv approach could be used to find the best number among the three smallest. It could be a good strategy here since the error rates for the three lowest number of neighbors are distinctly different and so can be fine tuned. 
 % ==============================================================================
 
 \end{document}

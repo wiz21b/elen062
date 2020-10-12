@@ -57,7 +57,7 @@ def nneighbor(ls_size,ts_size,seed,plot21,plot22):
         if plot22:
              fig = plt.scatter(k,error_rates)
              plt.xlabel("Number of neighbors")
-             plt.ylabel("Test set accuracy")
+             plt.ylabel("Error rate")
              plt.title(f"Problem {p_ndx}, LS size {ls_size}")
              plt.savefig(f"../plots/neighbors/2.2/p{p_ndx}_neighbors{number}_ls{ls_size}")
              plt.clf()
@@ -146,7 +146,7 @@ if __name__ == "__main__":
     TEST_SET_SIZE = 500
     best_values = []
     for size in LS_SIZES:
-        best_values.append(nneighbor(size,TEST_SET_SIZE,seed,False,False))
+        best_values.append(nneighbor(size,TEST_SET_SIZE,seed,False,True))
     best_values = np.array(best_values)
     #plot optimal values for neighbors with respect to LS Sizes
     plt.scatter(LS_SIZES,best_values[:,0], label="Problem 1")

@@ -272,6 +272,36 @@ For the first three choices of the neighbors, the second data set is fitted quit
 \subsection{Last Question}
 We don't think using cross validation is a good strategy for data set one because the achieved error rate among the three best choices does not differ by much. Therefore you can almost arbitrarily choose one of the three lowest numbers of neighbors and get an optimal result. \\
 In the case of data set 2, however, a cv approach could be used to find the best number among the three smallest. It could be a good strategy here since the error rates for the three lowest number of neighbors are distinctly different and so can be fine tuned. 
+
+\section{Residual fitting}
+\subsection{Proof}
+\subsection{Implement algorithm}
+See code.
+\subsection{Experiment 1}
+	\begin{figure}[H]
+	\centering
+	\subfloat{\includegraphics[width=\picwidth]{plots/linreg/rl1a.pdf}}
+	\subfloat{\includegraphics[width=\picwidth]{plots/linreg/rl1b.pdf}}
+	
+	\caption{\label{resfit1}Boundaries after residual fitting, basic datasets}
+     \end{figure}
+
+Decision boundaries are completely wrong.
+This is expected because since we compute a linear regression, we expect
+the training $y$ (ouputs) to follow linearly the inputs. However, it's not the case. 
+
+\subsection{Experiment 2}
+	\begin{figure}[H]
+	\centering
+	\subfloat{\includegraphics[width=\picwidth]{plots/linreg/rl2.pdf}}
+	
+	\caption{\label{resfit1}Boundaries after residual fitting, extended dataset}
+     \end{figure}
+
+Decision boundaries are better.
+When looking at the $w_k$, we see that the one associated to $X1*X2$ is quite bigger than the others. This term will grow bigger as points go away from the center and follow in such a way that it cuts the plane into quadrants. So the linear regression will in turn be able to cut the space into quadrants which, roughly, can decide if points are blue or red, but with much uncertainty.
+
 % ==============================================================================
+
 
 \end{document}

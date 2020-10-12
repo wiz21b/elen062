@@ -288,7 +288,7 @@ See code.
 
 Decision boundaries are completely wrong.
 This is expected because since we compute a linear regression, we expect
-the training $y$ (ouputs) to follow linearly the inputs. However, it's not the case. 
+the training $y$ (outputs) to follow linearly the inputs. However, it's not the case. The decision  regions follow naturally a shape guided by equations such as $x + y = N$ which of course closely look like the computation made by the regression :  $\hat{y} = w_0 + w_1 x + w_2 y$.
 
 \subsection{Experiment 2}
 	\begin{figure}[H]
@@ -299,7 +299,7 @@ the training $y$ (ouputs) to follow linearly the inputs. However, it's not the c
      \end{figure}
 
 Decision boundaries are better.
-When looking at the $w_k$, we see that the one associated to $X1*X2$ is quite bigger than the others. This term will grow bigger as points go away from the center and follow in such a way that it cuts the plane into quadrants. So the linear regression will in turn be able to cut the space into quadrants which, roughly, can decide if points are blue or red, but with much uncertainty.
+When looking at the $w_k$, we see that the one associated to $X1 \times X2$ is quite bigger than the others. This term will grow bigger as points go away from the center and follow in such a way that it cuts the plane into quadrants. So the linear regression will in turn be able to cut the space into quadrants which, roughly, can decide if points are blue or red, but with much uncertainty.
 
 % ==============================================================================
 

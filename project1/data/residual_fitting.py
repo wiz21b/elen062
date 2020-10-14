@@ -7,7 +7,6 @@ Project 1 - Classical algorithms
 # -*- coding: utf-8 -*-
 
 import numpy as np
-
 from sklearn.base import BaseEstimator
 from sklearn.base import ClassifierMixin
 import numpy.ma as ma
@@ -15,14 +14,13 @@ import numpy.ma as ma
 
 # For test purposes --------------------------------------------------
 from sklearn.linear_model import LinearRegression
+
+
 class LinReg(LinearRegression):
     def predict_proba(self, X):
-        p = self.predict(X)
-        # Less than 0 is closer to 0 than 1.
-        # More than 1 is closer to 1 than 0
-        c = np.clip(p,0,1)
-        return np.c_[ np.ones( p.shape[0]) - c, c  ]
+        return residual_fitting.predict_proba(self, X)
 # --------------------------------------------------------------------
+
 
 class residual_fitting(BaseEstimator, ClassifierMixin):
 
@@ -81,8 +79,8 @@ class residual_fitting(BaseEstimator, ClassifierMixin):
 
         N = len(observations)
 
-        self.attr_means = [ np.mean(row) for row in observations.T]
-        self.attr_stds = [ np.std(row) for row in observations.T]
+        self.attr_means = [np.mean(row) for row in observations.T]
+        self.attr_stds = [np.std(row) for row in observations.T]
 
         # Standardizing attributes values
         # Using numpy's broadcasting a lot here
@@ -104,12 +102,13 @@ class residual_fitting(BaseEstimator, ClassifierMixin):
 
         attributes_mask = np.array([False] + [True]*(DIM-1))
 
-        for new_a_ndx in range(1,DIM):
+        for new_a_ndx in range(1, DIM):
 
             # At each step the algorithm computes the best
             # w_k for a_k.
 
-            residuals = [self.delta_ky(attributes_mask, sy[o_ndx], observations[o_ndx], w)
+            residuals = [self.delta_ky(attributes_mask, sy[o_ndx],
+                                       observations[o_ndx], w)
                          for o_ndx in range(N)]
 
             # We compute our stuff on all the observations
@@ -123,7 +122,7 @@ class residual_fitting(BaseEstimator, ClassifierMixin):
             attributes_mask[new_a_ndx] = False
 
         # Save the weigths vector for later (prediction)
-        self.w = w
+        self.w = self.coef_ = w
 
         return self
 
@@ -144,11 +143,11 @@ class residual_fitting(BaseEstimator, ClassifierMixin):
         # Before predicting, I have to standardize observations
         # like it was done during the fitting.
 
-        npx = np.array(X,dtype=float)
-        standardized_X = ( npx - self.attr_means) / self.attr_stds
+        npx = np.array(X, dtype=float)
+        standardized_X = (npx - self.attr_means) / self.attr_stds
 
-        return np.sum( np.c_[np.ones(len(X)), standardized_X]*np.transpose(self.w), axis=1)
-
+        return np.sum(np.c_[np.ones(len(X)),
+                            standardized_X]*np.transpose(self.w), axis=1)
 
     def predict_proba(self, X):
         """Return probability estimates for the test data X.
@@ -165,15 +164,27 @@ class residual_fitting(BaseEstimator, ClassifierMixin):
             by lexicographic order.
         """
 
+        # Ideally the prediction is 0 or 1
+        # Since we have lin.reg., the prediction
+        # will be around those values.
+        # So if the prediction is closer to 0 than to 1,
+        # then the distance to 0 measures the model's certainty.
+        # (it doesn't mean the model is corret though, just that
+        # it is certain).
+
         p = self.predict(X)
 
-        # Less than 0 is closer to 0 than 1.
-        # More than 1 is closer to 1 than 0
-        c = np.clip(p,0,1)
+        d_class0 = np.abs(p - np.zeros(p.shape[0]))
+        d_class1 = np.abs(p - np.ones(p.shape[0]))
 
-        return np.c_[ np.ones( p.shape[0]) - c, c  ]
+        # Normalize distances to a [0,1] interval
+        n_0 = np.ones(p.shape[0]) - np.tanh(d_class0)
+        n_1 = np.ones(p.shape[0]) - np.tanh(d_class1)
 
+        # Normalize probabilities so their sum is one
+        z = np.ones(p.shape[0]) / (n_0 + n_1)
 
+        return np.c_[n_0*z, n_1*z]
 
 
 if __name__ == "__main__":
@@ -181,7 +192,7 @@ if __name__ == "__main__":
     from data import make_data1, make_data2
     from plot import plot_boundary, plot_boundary_extended
 
-    LINREG_PATH="../plots/linreg"
+    LINREG_PATH = "../plots/linreg"
     if not os.path.isdir(LINREG_PATH):
         os.makedirs(LINREG_PATH)
 
@@ -198,11 +209,11 @@ if __name__ == "__main__":
 
     # clf = LinReg().fit(inputs_ls, outputs_ls) # for crosschecking
     rf = residual_fitting()
-    clf = rf.fit( inputs_ls, outputs_ls)
+    clf = rf.fit(inputs_ls, outputs_ls)
 
     plot_boundary(f"{LINREG_PATH}/rl1a", clf,
                   inputs_ls, outputs_ls,
-                  title=f"Experiment 1, dataset 1")
+                  title="Experiment 1, dataset 1")
 
     # ----------------------------------------------------------------
     # Experiment 1, dataset 2
@@ -212,11 +223,11 @@ if __name__ == "__main__":
 
     # clf = LinReg().fit(inputs_ls, outputs_ls)  # for crosschecking
     rf = residual_fitting()
-    clf = rf.fit( inputs_ls, outputs_ls)
+    clf = rf.fit(inputs_ls, outputs_ls)
 
     plot_boundary(f"{LINREG_PATH}/rl1b", clf,
                   inputs_ls, outputs_ls,
-                  title=f"Experiment 1, dataset 2")
+                  title="Experiment 1, dataset 2")
 
     # ----------------------------------------------------------------
     # Experiment 2, dataset 2
@@ -224,30 +235,58 @@ if __name__ == "__main__":
     inputs_ls, outputs_ls, dummy1, dummy2 = make_data2(
             TEST_SET_SIZE, LEARNING_SET_SIZE, random_state=seed)
 
-    X1 = inputs_ls[:,0]
-    X2 = inputs_ls[:,1]
+    X1 = inputs_ls[:, 0]
+    X2 = inputs_ls[:, 1]
 
-    inputs_ls = np.c_[ inputs_ls, X1*X1, X2*X2, X1*X2]
+    inputs_ls = np.c_[inputs_ls, X1*X1, X2*X2, X1*X2]
 
     rf = residual_fitting()
-    clf = rf.fit( inputs_ls, outputs_ls)
+    # rf = LinReg()  # For cross checking
+    clf = rf.fit(inputs_ls, outputs_ls)
+    print(clf.coef_)
 
-    print( rf.w)
     plot_boundary_extended(f"{LINREG_PATH}/rl2", clf,
                            inputs_ls, outputs_ls,
-                           title=f"Experiment 2, dataset 2")
-
-
-
-
+                           title="Experiment 2, dataset 2")
+    exit()
 
     # Testing additional scenario. Not part of the exercise.
 
+    #TEST_SET_SIZE, LEARNING_SET_SIZE = 10, 10
+    print("testing...")
     inputs_ls, outputs_ls, dummy1, dummy2 = make_data1(
             TEST_SET_SIZE, LEARNING_SET_SIZE, random_state=seed)
+    X1 = inputs_ls[:,0]
+    X2 = inputs_ls[:,1]
 
-    inputs_ls = np.c_[ inputs_ls, X1*X1 , X1*X1 - 1, X2*X2 - 1]
+    inputs_ls = np.c_[ inputs_ls, np.sqrt( X1*X1 + X2*X2), X2*X2, X1*X2]
+    print( inputs_ls[:,2])
+
+    import matplotlib.pyplot as plt
+
     clf = LinReg().fit(inputs_ls, outputs_ls)  # for crosschecking
+    print(clf.coef_)
+
+    p = clf.predict( inputs_ls)
+
+    #plt.scatter( X1, X2, marker='o')
+
+    print( X1.shape)
+    print("-"*80)
+    print(p)
+    print(clf.predict_proba( inputs_ls))
+
+
+    plt.scatter( np.arange(X1.shape[0]), np.sqrt( X1*X1 + X2*X2))
+    plt.scatter( np.arange(X1.shape[0]), p)
+    plt.scatter( np.arange(X1.shape[0]), clf.predict_proba( inputs_ls)[:,0])
+    plt.scatter( np.arange(X1.shape[0]), clf.predict_proba( inputs_ls)[:,1])
+
+
+    # plt.scatter( x=inputs_ls[:,0], y=inputs_ls[:,1], s=clf.predict_proba( inputs_ls)[:,1]*50)
+
+    plt.show()
+
 
     plot_boundary_extended(f"{LINREG_PATH}/cc", clf,
                            inputs_ls, outputs_ls,

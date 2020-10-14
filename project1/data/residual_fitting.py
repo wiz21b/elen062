@@ -250,6 +250,7 @@ if __name__ == "__main__":
                            title="Experiment 2, dataset 2")
     exit()
 
+    # ////////////////////////////////////////////////////////////////
     # Testing additional scenario. Not part of the exercise.
 
     #TEST_SET_SIZE, LEARNING_SET_SIZE = 10, 10

@@ -299,7 +299,7 @@ the training $y$ (outputs) to follow linearly the inputs. However, it's not the 
      \end{figure}
 
 Decision boundaries are better.
-When looking at the $w_k$, we see that the one associated to $X1 \times X2$ is quite bigger than the others. This term will grow bigger as points go away from the center and follow in such a way that it cuts the plane into quadrants. So the linear regression will in turn be able to cut the space into quadrants which, roughly, can decide if points are blue or red, but with much uncertainty.
+When looking at the $w_k$, we see that the one associated to $X1 \times X2$ is quite bigger than the others. This term will grow bigger as points go away from the center and follow in such a way that it cuts the plane into quadrants. So the linear regression will in turn be able to cut the space into quadrants which, roughly, can decide if points are blue or red, but with much uncertainty. After some experiments, we've seen that an even better way of separating classes is to introduce $\sqrt{X1 ^ 2 + X2 ^ 2}$ as of course it gets us closer to a correspondance between the ouput and the distance from the center (as we have to fit circles).
 
 % ==============================================================================
 

@@ -275,6 +275,8 @@ In the case of data set 2, however, a cv approach could be used to find the best
 
 \section{Residual fitting}
 \subsection{Proof}
+% That's probably bullshit. Well, I tried..
+For a good solution we want to minimize the residual. In ever step the algorithm begins by initializing \(w_o\) as \(\bar{y}\) and then subtracts it from \(y(o)\). This value is approximately the standard deviation of \(y\) in absolute terms. So in order to minimize the residual, the weights should be chosen so that the sum equals roughly the standard deviation of \(y\). Therefore the algorithm weighs each attribute \(a_i(o)\) with its correlation to the corresponding residual and the residual's standard deviation.   
 \subsection{Implement algorithm}
 See code.
 \subsection{Experiment 1}

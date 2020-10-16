@@ -28,17 +28,18 @@ class residual_fitting(BaseEstimator, ClassifierMixin):
         D = len(a)
         a = np.array(a)
         b = np.array(b)
+
+        # See https://en.wikipedia.org/wiki/Pearson_correlation_coefficient
+        # at section "For a sample"
+
         m_a = a - np.mean(a) * np.ones((1, D))
         m_b = b - np.mean(b) * np.ones((1, D))
-        std_a = np.std(m_a)  # np.sqrt(np.sum(m_a*m_a) / D)
-        std_b = np.std(m_b)  # np.sqrt(np.sum(m_b*m_b) / D)
-        cov = np.sum(m_a*m_b) / (D-1)  # np.cov gives a matrix :-(
+        cov = np.sum(m_a*m_b)
 
-        if abs(cov) < 1e-10:
-            # avoid div by zero
-            return 0
-        else:
-            return cov / (std_a*std_b)
+        da = np.sqrt(np.sum(m_a*m_a))
+        db = np.sqrt(np.sum(m_b*m_b))
+
+        return cov / (da*db)
 
     def delta_ky(self, a_indices, y_observation, a_observation, w_params):
         a_obs = ma.masked_array(a_observation, mask=a_indices)
@@ -122,6 +123,7 @@ class residual_fitting(BaseEstimator, ClassifierMixin):
             attributes_mask[new_a_ndx] = False
 
         # Save the weigths vector for later (prediction)
+        # (set self.coef_ to mimic lin. reg. of scikit)
         self.w = self.coef_ = w
 
         return self
@@ -209,8 +211,8 @@ if __name__ == "__main__":
 
     # clf = LinReg().fit(inputs_ls, outputs_ls) # for crosschecking
     rf = residual_fitting()
-    clf = rf.fit(inputs_ls, outputs_ls)
 
+    clf = rf.fit(inputs_ls, outputs_ls)
     plot_boundary(f"{LINREG_PATH}/rl1a", clf,
                   inputs_ls, outputs_ls,
                   title="Experiment 1, dataset 1")

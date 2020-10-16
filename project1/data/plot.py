@@ -86,8 +86,7 @@ def plot_boundary(fname, fitted_estimator, X, y, mesh_step_size=0.1, title="", i
         plt.ylim(yy.min(), yy.max())
 
         plt.savefig("{}.pdf".format(fname))
-        plt.savefig("{}.svg".format(fname))
-
+        
     finally:
         if inline_plotting:
             plt.plot()
@@ -127,7 +126,7 @@ def plot_boundary_extended(fname, fitted_estimator, X, y, mesh_step_size=0.1, ti
     xx, yy = np.meshgrid(np.arange(x_min, x_max, mesh_step_size),
                          np.arange(y_min, y_max, mesh_step_size))
 
-
+    
     if hasattr(fitted_estimator, "decision_function"):
         Z = fitted_estimator.decision_function(np.c_[xx.ravel(), yy.ravel()])
     else:
@@ -151,8 +150,7 @@ def plot_boundary_extended(fname, fitted_estimator, X, y, mesh_step_size=0.1, ti
         plt.ylim(yy.min(), yy.max())
 
         plt.savefig("{}.pdf".format(fname))
-        plt.savefig("{}.svg".format(fname))
-
+        
     finally:
         if inline_plotting:
             plt.plot()

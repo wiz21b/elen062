@@ -194,7 +194,7 @@ if __name__ == "__main__":
     from data import make_data1, make_data2
     from plot import plot_boundary, plot_boundary_extended
 
-    LINREG_PATH = "../plots/linreg"
+    LINREG_PATH = "plots/linreg"
     if not os.path.isdir(LINREG_PATH):
         os.makedirs(LINREG_PATH)
 

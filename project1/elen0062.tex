@@ -65,28 +65,28 @@ ellipses are hard to classify and introduce instabilities.
 
 \begin{figure}[htbp]
   \centering
-  
-  \subfloat{   \includegraphics[width=\picwidth]{plots/dec_tree/p1_depth1.pdf}}
-  \subfloat{   \includegraphics[width=\picwidth]{plots/dec_tree/p1_depth2.pdf}}
-  
-  \subfloat{   \includegraphics[width=\picwidth]{plots/dec_tree/p1_depth4.pdf}}
-  \subfloat{   \includegraphics[width=\picwidth]{plots/dec_tree/p1_depth8.pdf}}
-  
-  \subfloat{   \includegraphics[width=\picwidth]{plots/dec_tree/p1_depthNone.pdf}}
-  
-  
+
+  \subfloat{   \includegraphics[width=\picwidth]{data/plots/dec_tree/p1_depth1.pdf}}
+  \subfloat{   \includegraphics[width=\picwidth]{data/plots/dec_tree/p1_depth2.pdf}}
+
+  \subfloat{   \includegraphics[width=\picwidth]{data/plots/dec_tree/p1_depth4.pdf}}
+  \subfloat{   \includegraphics[width=\picwidth]{data/plots/dec_tree/p1_depth8.pdf}}
+
+  \subfloat{   \includegraphics[width=\picwidth]{data/plots/dec_tree/p1_depthNone.pdf}}
+
+
   \caption{\label{boundary1}Decision boundaries problem 1}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  \subfloat{ \includegraphics[width=\picwidth]{plots/dec_tree/p2_depth1.pdf}}
-  \subfloat{ \includegraphics[width=\picwidth]{plots/dec_tree/p2_depth2.pdf}}
+  \subfloat{ \includegraphics[width=\picwidth]{data/plots/dec_tree/p2_depth1.pdf}}
+  \subfloat{ \includegraphics[width=\picwidth]{data/plots/dec_tree/p2_depth2.pdf}}
 
-  \subfloat{ \includegraphics[width=\picwidth]{plots/dec_tree/p2_depth4.pdf}}
-  \subfloat{ \includegraphics[width=\picwidth]{plots/dec_tree/p2_depth8.pdf}}
-  
-  \subfloat{ \includegraphics[width=\picwidth]{plots/dec_tree/p2_depthNone.pdf}}
+  \subfloat{ \includegraphics[width=\picwidth]{data/plots/dec_tree/p2_depth4.pdf}}
+  \subfloat{ \includegraphics[width=\picwidth]{data/plots/dec_tree/p2_depth8.pdf}}
+
+  \subfloat{ \includegraphics[width=\picwidth]{data/plots/dec_tree/p2_depthNone.pdf}}
 
   \caption{\label{boundary2}Decision boundaries problem 2}
 \end{figure}
@@ -116,7 +116,7 @@ None & 0.0\% & 0.66\% & - \\
 	\end{tabular}
   \caption{\label{overfitting1}Overfitting for problem 1}
 \end{table}
-	
+
 \begin{table}[h]
   \centering
 	\begin{tabular}{rrrl}
@@ -139,7 +139,7 @@ For problem 1, the model becomes more confident for the obvious reason that it's
 
 For problem 2, it's less obvious. The model improves with depth up to depth 8 as it can split the space in distinct parts, that fits the greater number of point. However, at unconstraint depth, it can't sort out the intersection between the ellipses and tends to over fit (see above). So we'd say that although it's globally improving, it does become more instable locally.
 
-	
+
 
 \subsection{Test set accuracies over 5 generations}
 
@@ -156,7 +156,7 @@ We give the mean error rates and accomanying standard deviations for both proble
 4 & 0.61 & 0.05 \\
 8 & 0.61 & 0.05 \\
 None & 0.61 & 0.05 \\
-	      
+
 	\end{tabular}}
 \subfloat[Problem 2]{
 	\begin{tabular}{rcr}
@@ -176,7 +176,7 @@ We conclude that problem 1's tree stabilizes from depth 4 on. For problem 2, the
 \subsection{Comparing problems one and two}
 
 Considering the information above, we can say that the problem1 is much easier to deal with  a decision tree. The mean and std dev. of error rate converge towards 0 as depth increases, without much overfitting.
-That's because the positions of the two set of points are clearly separated and their relative positions and shapes allow for a boundary to be built by sequentially dividing the space along orthogonal lines. 
+That's because the positions of the two set of points are clearly separated and their relative positions and shapes allow for a boundary to be built by sequentially dividing the space along orthogonal lines.
 
 Problem 2 is not good for a decision tree because the two sets of points overlap in some area. The mean never gets close to zero (even at  unconstrainted depth) and std dev. of error rate doesn't converge towards 0 as depth increases. Moreovoer overfitting occurs.
 
@@ -187,34 +187,34 @@ Problem 2 is not good for a decision tree because the two sets of points overlap
 \subsubsection{Boundaries}
 	\begin{figure}[H]
 		\centering
-		
-		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p1_neighbors1.pdf}}
-		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p1_neighbors5.pdf}}
-		
-		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p1_neighbors10.pdf}}
-		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p1_neighbors75.pdf}}
-		
-		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p1_neighbors100.pdf}}
-		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p1_neighbors150.pdf}}
-		
-		
+
+		\subfloat{   \includegraphics[width=\picwidth]{data/plots/neighbors/p1_neighbors1.pdf}}
+		\subfloat{   \includegraphics[width=\picwidth]{data/plots/neighbors/p1_neighbors5.pdf}}
+
+		\subfloat{   \includegraphics[width=\picwidth]{data/plots/neighbors/p1_neighbors10.pdf}}
+		\subfloat{   \includegraphics[width=\picwidth]{data/plots/neighbors/p1_neighbors75.pdf}}
+
+		\subfloat{   \includegraphics[width=\picwidth]{data/plots/neighbors/p1_neighbors100.pdf}}
+		\subfloat{   \includegraphics[width=\picwidth]{data/plots/neighbors/p1_neighbors150.pdf}}
+
+
 		\caption{\label{boundary2.3p1}Decision boundaries problem 1}
 	\end{figure}
 	\begin{figure}[H]
 		\centering
-		
-		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p2_neighbors1.pdf}}
-		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p2_neighbors5.pdf}}
-		
-		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p2_neighbors10.pdf}}
-		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p2_neighbors75.pdf}}
-		
-		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p2_neighbors100.pdf}}
-		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/p2_neighbors150.pdf}}
-		
-		
+
+		\subfloat{   \includegraphics[width=\picwidth]{data/plots/neighbors/p2_neighbors1.pdf}}
+		\subfloat{   \includegraphics[width=\picwidth]{data/plots/neighbors/p2_neighbors5.pdf}}
+
+		\subfloat{   \includegraphics[width=\picwidth]{data/plots/neighbors/p2_neighbors10.pdf}}
+		\subfloat{   \includegraphics[width=\picwidth]{data/plots/neighbors/p2_neighbors75.pdf}}
+
+		\subfloat{   \includegraphics[width=\picwidth]{data/plots/neighbors/p2_neighbors100.pdf}}
+		\subfloat{   \includegraphics[width=\picwidth]{data/plots/neighbors/p2_neighbors150.pdf}}
+
+
 		\caption{\label{boundary2.3p2}Decision boundaries problem 2}
-		
+
 	\end{figure}
 
 \subsubsection{Comment}
@@ -233,61 +233,61 @@ The same is true for the second data set. The more neighbors are used the more u
 	\end{itemize}
 	Afterwards we selected the number of neighbors that achieved the highest mean accuracy over the five subsets.
 	\item
-	The optimal value for the neighbors is 5 and the mean of the accuracies 16.84\%. Just by looking at the plotted decision boundaries for the learning set in section 2.1 we would have expected to see 1 as the optimal value. 
+	The optimal value for the neighbors is 5 and the mean of the accuracies 16.84\%. Just by looking at the plotted decision boundaries for the learning set in section 2.1 we would have expected to see 1 as the optimal value.
 \end{enumerate}
 
 \subsection{Optimal Value of Neighbors with respect to LS Size}
 \subsubsection{Plots}
 		\begin{figure}[H]
 		\centering
-		
-		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/2.2/p1_neighbors150_ls50.png}}
-		\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/2.2/p1_neighbors150_ls200.png}} \\
-			\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/2.2/p1_neighbors150_ls250.png}}
-				\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/2.2/p1_neighbors150_ls500.png}}
-				
-		
+
+		\subfloat{   \includegraphics[width=\picwidth]{data/plots/neighbors/2.2/p1_neighbors150_ls50.png}}
+		\subfloat{   \includegraphics[width=\picwidth]{data/plots/neighbors/2.2/p1_neighbors150_ls200.png}} \\
+			\subfloat{   \includegraphics[width=\picwidth]{data/plots/neighbors/2.2/p1_neighbors150_ls250.png}}
+				\subfloat{   \includegraphics[width=\picwidth]{data/plots/neighbors/2.2/p1_neighbors150_ls500.png}}
+
+
 		\caption{\label{acc2.3p1}Test Set Accuracies Problem 1}
-		
+
 	\end{figure}
 	\begin{figure}[H]
 	\centering
-	\subfloat{\includegraphics[width=\picwidth]{plots/neighbors/2.2/p2_neighbors150_ls50.png}}
-	\subfloat{\includegraphics[width=\picwidth]{plots/neighbors/2.2/p2_neighbors150_ls200.png}} \\
-	\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/2.2/p2_neighbors150_ls250.png}}
-	\subfloat{   \includegraphics[width=\picwidth]{plots/neighbors/2.2/p2_neighbors150_ls500.png}}
-	
+	\subfloat{\includegraphics[width=\picwidth]{data/plots/neighbors/2.2/p2_neighbors150_ls50.png}}
+	\subfloat{\includegraphics[width=\picwidth]{data/plots/neighbors/2.2/p2_neighbors150_ls200.png}} \\
+	\subfloat{   \includegraphics[width=\picwidth]{data/plots/neighbors/2.2/p2_neighbors150_ls250.png}}
+	\subfloat{   \includegraphics[width=\picwidth]{data/plots/neighbors/2.2/p2_neighbors150_ls500.png}}
+
 	\caption{\label{acc2.3p2}Test Set Accuracies Problem 2}
-	
+
 \end{figure}
 \begin{figure}[H]
 	\centering
-\includegraphics[width=\picwidth]{plots/neighbors/2.3/optimal_values.pdf}
+\includegraphics[width=\picwidth]{data/plots/neighbors/2.3/optimal_values.pdf}
 	\caption{\label{acc2.3p2}Optimal number of neighbors}
-	
+
 \end{figure}
 \subsubsection{Comment}
 For the first data set, regardless of the size of the learning set, we observe that one neighbor produces the best accuracy. As the number of neighbors increases, the accuracy slightly increases. However, when 150 neighbors are used the error rate is considerably higher than in the other cases. \\
 For the first three choices of the neighbors, the second data set is fitted quite nicely. The optimal number of neighbors depends on the actual size of the learning set, but it is always found among the three smallest number of neighbors. Starting from 75 neighbors, the error rate rises drastically and peaks at 150 neighbors.
 \subsection{Last Question}
 We don't think using cross validation is a good strategy for data set one because the achieved error rate among the three best choices does not differ by much. Therefore you can almost arbitrarily choose one of the three lowest numbers of neighbors and get an optimal result. \\
-In the case of data set 2, however, a cv approach could be used to find the best number among the three smallest. It could be a good strategy here since the error rates for the three lowest number of neighbors are distinctly different and so can be fine tuned. 
+In the case of data set 2, however, a cv approach could be used to find the best number among the three smallest. It could be a good strategy here since the error rates for the three lowest number of neighbors are distinctly different and so can be fine tuned.
 
 \section{Residual fitting}
 \subsection{Proof}
 %\textbf{ALTERNATE EXPLANATION} : Given a $\Delta_ky$, the question is how to weight $a_k$ in the best way.
-%The first thing to note is that $\Delta_ky$ is a vector that measures the error 
+%The first thing to note is that $\Delta_ky$ is a vector that measures the error
 %on the prediction in all $k-1$ dimensions (it actually points in the opposite direction of the error). $\sigma_{\Delta_ky}$ therefore
 %denotes the magnitude of that error, it summarizes it on all directions.
 
 %Now, when we add $a_k$ we want to minimize that error. We look at
-%its correlation with the vector error. 
+%its correlation with the vector error.
 %The Pearson's factor basically means
 %that we'll weight more an $a_k$ than ``pushes'' in the opposite direction
 %of the error. Since $a_k$ are prewithened (0 centered, $\sigma=1$),
 %the  $\sigma_{\Delta_ky}$ provides the best estimation of the error.
 
-%$0 \leq w_k \leq |\sigma_{\Delta_ky}|$ and since $|a_ki| \leq 1$ 
+%$0 \leq w_k \leq |\sigma_{\Delta_ky}|$ and since $|a_ki| \leq 1$
 If we try to find the best $w_k$, we look for the one that minimizes $\Delta_ky - w_k a_k$.
 One way to put it is to minimizes the squared sum $\sum\limits_{i=1}^N ( \Delta_{k,i}y_i - w_k a_{k,i})^2$.
 To do that we take the derivative for $w_k$ and try to set it to zero :
@@ -311,15 +311,15 @@ The proposed $w_k$ is $\rho_{\Delta_ky} \cdot {\Delta_k}y$ with $\rho$ the Pears
 \begin{equation*}
 w_k= \frac{\Cov(\Delta_ky, a_k)}{\sigma_{\Delta_ky} \sigma_{a_k}} \sigma_{\Delta_ky} = \frac{\Cov(\Delta_ky, a_k)}{\sigma_{a_k}} = \Cov(\Delta_ky, a_k),
 \end{equation*}
-since \(\sigma_k=1\) and are done.
+since \(\sigma_k=1\) which equals \ref{myeq}.
 \subsection{Implement algorithm}
 See code.
 \subsection{Experiment 1}
 	\begin{figure}[H]
 	\centering
-	\subfloat{\includegraphics[width=\picwidth]{plots/linreg/rl1a.pdf}}
-	\subfloat{\includegraphics[width=\picwidth]{plots/linreg/rl1b.pdf}}
-	
+	\subfloat{\includegraphics[width=\picwidth]{data/plots/linreg/rl1a.pdf}}
+	\subfloat{\includegraphics[width=\picwidth]{data/plots/linreg/rl1b.pdf}}
+
 	\caption{\label{resfit1}Boundaries after residual fitting, basic datasets}
      \end{figure}
 
@@ -330,8 +330,8 @@ the training $y$ (outputs) to follow linearly the inputs. However, it's not the 
 \subsection{Experiment 2}
 	\begin{figure}[H]
 	\centering
-	\subfloat{\includegraphics[width=\picwidth]{plots/linreg/rl2.pdf}}
-	
+	\subfloat{\includegraphics[width=\picwidth]{data/plots/linreg/rl2.pdf}}
+
 	\caption{\label{resfit1}Boundaries after residual fitting, extended dataset}
      \end{figure}
 

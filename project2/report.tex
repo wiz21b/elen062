@@ -38,6 +38,25 @@
 \section{Analytical derivations}
 \subsection{Bayes model and residual error in classification}
 \subsubsection{analytical formulation of the Bayes model}
+
+Bayes model is the estimation that minimizes the error :
+$E_y\{ L(y,\hat{y})\}$ with  $L_1 = 0 or 1 $ if $y = \hat{y}$ or not.
+In our case, $y$ is function of two parameters $x_0,x_1$
+So we need to minimize :
+
+$$ E_y\{ L(y,\hat{y}(x_0,x_1))\} $$
+
+Since $y$ and $\hat{y}$ are both in $(+1,-1)$, the loss error $L_1$
+can be rewritten as $L_1(y,\hat{y}) = \frac{y + \hat{y}}{2}$ which will
+be in $(+1,-1)$. So we want to minimize :
+
+$$ E_y\{ \frac{y + \hat{y}(x_0,x_1)}{2}\} $$
+
+
+
+
+
+
 \subsubsection{nalytical formulation of the residual error}
 
 \subsection{Bias and variance of ridge regression}

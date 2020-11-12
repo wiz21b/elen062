@@ -7,15 +7,14 @@ import matplotlib.pyplot as plt
 # -----------------------------------------------------------------------------
 # Evaluating the integral for epexctation of misclassification
 
-rho = -0.75
-
+rho = 0.75
 
 def integrand(x0, x1):
-    return np.exp(-0.5 * (1/(rho*rho - 1)) * (-x0**2 - x1**2 + 2*x0*x1*rho))
+    return np.exp(-0.5 * (1/(rho*rho - 1)) * (-x0**2 - x1**2 + 2*x0*x1*(-rho)))
 
 
 det = 1 - rho*rho
-k = (1/(2*pi)) * (1 / sqrt(det))
+k = 0.5 * (1/(2*pi)) * (1 / sqrt(det))
 
 i, err_on_i = dblquad(
     integrand,
@@ -31,7 +30,6 @@ print("integral's value = {}".format(k*i))
 
 NP = 1000
 
-rho = -rho
 cov = np.array([ [1, rho], [rho, 1]  ])
 s1 = np.random.multivariate_normal([0,0], cov, NP)
 cov = np.array([ [1, -rho], [-rho, 1]  ])

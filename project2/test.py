@@ -7,25 +7,88 @@ from sklearn.linear_model import LinearRegression
 
 ## 2.c Bayes model
 
-def truth( x):
-    return x + np.random.normal(0,1)
+def truth(x, sigma):
+    return x + np.random.normal(0, sigma)
 
 x0 = 10
 N = 100
-samples = np.array( [truth(x0) for i in range(N)])
+sigma = 0.2
+
+samples = np.array( [truth(x0, sigma) for i in range(N)])
 bayes = np.ones( (100,) ) * x0
 
-print( "experimental residual error = {}".format(np.sum((samples - bayes)**2) / N))
+print( "experimental residual error = {:.3f}, expected = {:.3f}".format(np.sum((samples - bayes)**2) / N, sigma**2))
 
 
 ## 2.d
 
+def bayes(x):
+    return -x**3 + 3*x**2 - 2*x + 1
+
 def f(x):
-    return -x**3 + 3*x**2 - 2*x + 1 + np.random.normal(0, 0.1)
+    return bayes(x) + np.random.normal(0, 0.1)
+
+
+def make_n_learning_set( n, s):
+    # Make n learning sets of s elements each
+
+    ls = []
+    for i in range(n):
+        xs = np.random.uniform(0,2,s)
+        ys = np.array( [f(x) for x in xs] )
+        ls.append( (ys,xs) )
+
+    return ls
+
+
+def train_models( learning_sets, learning_algorithm):
+    # Use the learning_algorithm to train models over
+    # the learning set
+
+    # The learning algorithm is a number in [0-5]
+    assert 0 <= learning_algorithm <= 5
+
+    models = []
+    for ys, xs in learning_sets:
+        powers_of_x = np.stack([xs**i for i in range(0, learning_algorithm+1)])
+        model = LinearRegression()
+        reg = model.fit(powers_of_x.T, ys)
+
+        models.append(reg)
+
+    return models
+
+
+def squared_bias_of_models_at_x(learning_algorithm, models, x, bayes_value):
+    powers_of_x = np.array([ [x**i for i in range(0, learning_algorithm+1)] ])
+
+    predictions = []
+    for model in models:
+        predictions.append((bayes_value - model.predict(powers_of_x))**2)
+
+    return np.average(np.array(predictions))
+
+biases = []
+for learning_algorithm in range(0, 5+1):
+    learning_sets = make_n_learning_set(n=10, s=30)
+    models = train_models(learning_sets, learning_algorithm)
+    bias = []
+    for x0 in np.arange(0, 2, 0.01):
+        bias.append(squared_bias_of_models_at_x(learning_algorithm, models, x0, bayes(x0)))
+
+    biases.append(bias)
+
+for algo, bias in enumerate(biases):
+    plt.scatter(np.arange(0, 2, 0.01), bias, marker='.', linewidths=0, label=f"m={algo}")
+
+plt.title("Bias")
+plt.legend()
+plt.show()
+exit()
 
 
 xs = np.random.uniform(0,2,N)
-ys = np.array( [f(x) for x in xs] )
+ys = np.array([f(x) for x in xs] )
 plt.scatter(xs, ys, marker='.')
 
 N = 30
@@ -40,6 +103,9 @@ for M in range(0,5+1):
     plt.scatter(xs, prediction, marker='.')
 
 plt.show()
+
+
+
 exit()
 
 

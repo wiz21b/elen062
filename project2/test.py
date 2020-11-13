@@ -5,7 +5,7 @@ from math import sqrt, pi
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
-## Bayes model
+## 2.c Bayes model
 
 def truth( x):
     return x + np.random.normal(0,1)
@@ -17,22 +17,28 @@ bayes = np.ones( (100,) ) * x0
 
 print( "experimental residual error = {}".format(np.sum((samples - bayes)**2) / N))
 
+
+## 2.d
+
 def f(x):
     return -x**3 + 3*x**2 - 2*x + 1 + np.random.normal(0, 0.1)
 
-N = 500
-M = 5
+
 xs = np.random.uniform(0,2,N)
 ys = np.array( [f(x) for x in xs] )
-
-powers_of_x = np.stack( [xs**i for i in range(1,M)] )
-model = LinearRegression()
-reg = model.fit(powers_of_x.T, ys)
-
-prediction = reg.predict(powers_of_x.T)
-
 plt.scatter(xs, ys, marker='.')
-plt.scatter(xs, prediction, marker='o')
+
+N = 30
+for M in range(0,5+1):
+
+    powers_of_x = np.stack( [xs**i for i in range(0,M+1)] )
+    model = LinearRegression()
+    reg = model.fit(powers_of_x.T, ys)
+
+    prediction = reg.predict(powers_of_x.T)
+
+    plt.scatter(xs, prediction, marker='.')
+
 plt.show()
 exit()
 

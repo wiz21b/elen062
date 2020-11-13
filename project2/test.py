@@ -62,25 +62,47 @@ def train_models( learning_sets, learning_algorithm):
 def squared_bias_of_models_at_x(learning_algorithm, models, x, bayes_value):
     powers_of_x = np.array([ [x**i for i in range(0, learning_algorithm+1)] ])
 
+    # Ask each model to predict its value of y
     predictions = []
     for model in models:
-        predictions.append((bayes_value - model.predict(powers_of_x))**2)
+        predictions.append(model.predict(powers_of_x))
 
-    return np.average(np.array(predictions))
+    return (bayes_value - np.average(np.array(predictions)))**2
+
+def variance_of_models_at_x(learning_algorithm, models, x, bayes_value):
+    powers_of_x = np.array([ [x**i for i in range(0, learning_algorithm+1)] ])
+
+    predictions = []
+    for model in models:
+        predictions.append(model.predict(powers_of_x))
+    avg_pred = np.average(predictions)
+
+    diff = []
+    for model in models:
+        diff = (model.predict(powers_of_x) - avg_pred)**2
+
+    return np.average(np.array(diff))
+
 
 biases = []
 for learning_algorithm in range(0, 5+1):
-    learning_sets = make_n_learning_set(n=10, s=30)
+    learning_sets = make_n_learning_set(n=20, s=30)
     models = train_models(learning_sets, learning_algorithm)
     bias = []
     for x0 in np.arange(0, 2, 0.01):
-        bias.append(squared_bias_of_models_at_x(learning_algorithm, models, x0, bayes(x0)))
+        #bias.append(squared_bias_of_models_at_x(learning_algorithm, models, x0, bayes(x0)))
+        bias.append(variance_of_models_at_x(learning_algorithm, models, x0, bayes(x0)))
 
     biases.append(bias)
 
 for algo, bias in enumerate(biases):
     plt.scatter(np.arange(0, 2, 0.01), bias, marker='.', linewidths=0, label=f"m={algo}")
 
+for h in [0, 0.5, 1, 1.75]:
+    plt.axvline(x=h,c='black')
+# plt.axvline(x=0.5)
+# plt.axvline(x=1)
+# plt.axvline(x=1.75)
 plt.title("Bias")
 plt.legend()
 plt.show()

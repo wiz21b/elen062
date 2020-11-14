@@ -109,27 +109,51 @@ def variance_of_models_at_x(learning_algorithm, models, x, bayes_value):
 
 
 biases = []
+variances = []
 for learning_algorithm in range(0, 5+1):
+    print(f"training for algo m={learning_algorithm}")
     learning_sets = make_n_learning_set(n=20, s=30)
     models = train_models(learning_sets, learning_algorithm)
     bias = []
+    variance = []
     for x0 in np.arange(0, 2, 0.01):
-        #bias.append(squared_bias_of_models_at_x(learning_algorithm, models, x0, bayes(x0)))
-        bias.append(variance_of_models_at_x(learning_algorithm, models, x0, bayes(x0)))
+        bias.append(squared_bias_of_models_at_x(
+            learning_algorithm, models, x0, bayes(x0)))
+        variance.append(variance_of_models_at_x(
+            learning_algorithm, models, x0, bayes(x0)))
 
     biases.append(bias)
+    variances.append(variance)
+
+# Draw biases plot
 
 for algo, bias in enumerate(biases):
     plt.scatter(np.arange(0, 2, 0.01), bias, marker='.', linewidths=0, label=f"m={algo}")
 
 for h in [0, 0.5, 1, 1.75]:
     plt.axvline(x=h,c='black')
-# plt.axvline(x=0.5)
-# plt.axvline(x=1)
-# plt.axvline(x=1.75)
 plt.title("Bias")
+plt.xlabel("x")
 plt.legend()
 plt.show()
+
+# Draw variances plot
+
+plt.figure(1)
+for algo, variance in enumerate(variances):
+    plt.scatter(np.arange(0, 2, 0.01), variance, marker='.', linewidths=0, label=f"m={algo}")
+
+for h in [0, 0.5, 1, 1.75]:
+    plt.axvline(x=h,c='black')
+plt.title("Variance")
+plt.ylim(0, sigma_squared * 1.1)
+plt.xlabel("x")
+plt.legend()
+
+
+
+plt.show()
+
 exit()
 
 

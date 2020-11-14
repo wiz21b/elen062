@@ -32,20 +32,25 @@ def f(x):
 def make_n_learning_set( n, s):
     # Make n learning sets of s elements each
 
+    # Statement : Estimate and plot the following quantities
+    # for x ∈ [0,2] and using learning samples of size N= 30
+
     ls = []
     for i in range(n):
-        xs = np.random.uniform(0,2,s)
-        ys = np.array( [f(x) for x in xs] )
-        ls.append( (ys,xs) )
+        xs = np.random.uniform(0, 2, s)
+        ys = np.array([f(x) for x in xs])
+        ls.append((ys, xs))
 
     return ls
 
 
-def train_models( learning_sets, learning_algorithm):
-    # Use the learning_algorithm to train models over
+def train_models(learning_sets, learning_algorithm):
+    # Use the algorithm number learning_algorithm to train models over
     # the learning set
 
-    # The learning algorithm is a number in [0-5]
+    # The learning algorithm is a number in [0-5], that's
+    # the m number in the problem statement.
+
     assert 0 <= learning_algorithm <= 5
 
     models = []

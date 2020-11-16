@@ -4,12 +4,9 @@ from scipy.integrate import dblquad
 import numpy as np
 from math import sqrt, pi
 import matplotlib.pyplot as plt
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, Ridge
 
 
-
-
-# 2.c Bayes model
 
 def bayes(x):
     return -x**3 + 3*x**2 - 2*x + 1
@@ -32,6 +29,10 @@ experimental_residual_error = np.sum((samples - bayes_values)**2) / N
 print("experimental residual error = {:.3f}, expected = {:.3f}".format(
     experimental_residual_error, sigma_squared))
 
+
+# 2.c Bayes model
+
+
 # Plotting Bayes model
 
 plt.figure(10)
@@ -40,7 +41,8 @@ plt.plot(rng, [bayes(x) for x in rng])
 #plt.plot(rng, [truth(x, sigma_squared) for x in rng])
 plt.title("Bayes model")
 plt.xlabel("x")
-plt.show()
+plt.savefig("q2c_bayes.pdf")
+#plt.show()
 
 
 plt.figure(11)
@@ -59,9 +61,9 @@ plt.xlabel("x")
 plt.ylabel("Experimental error")
 plt.axhline(y=sigma_squared, c='black', linestyle='--', label="σ²")
 plt.legend()
-plt.show()
+plt.savefig("q2c_error.pdf")
+#plt.show()
 
-exit()
 
 ## 2.d
 
@@ -108,7 +110,7 @@ def train_models(learning_sets, learning_algorithm):
 
         # For the training, we use a0 + a1 * x_i + a2 * x_i² + ...
         powers_of_x = np.stack([xs**i for i in range(0, learning_algorithm+1)])
-        model = LinearRegression()
+        model = LinearRegression(fit_intercept=False)
         reg = model.fit(powers_of_x.T, ys)
 
         models.append(reg)
@@ -117,7 +119,7 @@ def train_models(learning_sets, learning_algorithm):
 
 
 def squared_bias_of_models_at_x(learning_algorithm, models, x, bayes_value):
-    powers_of_x = np.array([ [x**i for i in range(0, learning_algorithm+1)] ])
+    powers_of_x = np.array([[x**i for i in range(0, learning_algorithm+1)] ])
 
     # Ask each model to predict its value of y
     predictions = []
@@ -125,6 +127,7 @@ def squared_bias_of_models_at_x(learning_algorithm, models, x, bayes_value):
         predictions.append(model.predict(powers_of_x))
 
     return (bayes_value - np.average(np.array(predictions)))**2
+
 
 def variance_of_models_at_x(learning_algorithm, models, x, bayes_value):
     powers_of_x = np.array([ [x**i for i in range(0, learning_algorithm+1)] ])
@@ -160,6 +163,7 @@ for learning_algorithm in range(0, 5+1):
 
 # Draw biases plot
 
+plt.figure(20)
 for algo, bias in enumerate(biases):
     plt.scatter(np.arange(0, 2, 0.01), bias, marker='.', linewidths=0, label=f"m={algo}")
 
@@ -168,11 +172,12 @@ for h in [0, 0.5, 1, 1.75]:
 plt.title("Bias")
 plt.xlabel("x")
 plt.legend()
-plt.show()
+plt.savefig("bias_d.pdf")
+#plt.show()
 
 # Draw variances plot
 
-plt.figure(1)
+plt.figure(21)
 for algo, variance in enumerate(variances):
     plt.scatter(np.arange(0, 2, 0.01), variance, marker='.', linewidths=0, label=f"m={algo}")
 
@@ -181,5 +186,79 @@ for h in [0, 0.5, 1, 1.75]:
 plt.title("Variance")
 plt.ylim(0, sigma_squared * 1.1)
 plt.xlabel("x")
+plt.savefig("var_d.pdf")
 plt.legend()
+#plt.show()
+
+
+# Start over with ridge regression
+
+
+def train_models_ridge(learning_sets, learning_algorithm, lambda_):
+    # Use the algorithm number learning_algorithm to train models over
+    # the learning set.
+    # We create as many models as learning sets.
+
+    # The learning algorithm is a number in [0-5], that's
+    # the m number in the problem statement.
+
+    assert 0 <= learning_algorithm <= 5
+
+    models = []
+    for ys, xs in learning_sets:
+
+        # A model is a0 + a1 * x + a2 * x² + ...
+        # range will go from 0 to m inclusive !
+
+        # For the training, we use a0 + a1 * x_i + a2 * x_i² + ...
+        powers_of_x = np.stack([xs**i for i in range(0, learning_algorithm+1)])
+
+        model = Ridge(alpha=lambda_,fit_intercept=False)  # scipy has other naming convention
+        reg = model.fit(powers_of_x.T, ys)
+
+        models.append(reg)
+
+    return models
+
+
+biases = []
+variances = []
+
+lambdas = [x for x in np.linspace(0, 2, 5)]
+for lambda_ in lambdas:
+
+    print(f"Training on lambde = {lambda_}")
+    learning_algorithm = 5 # per problem statement
+    learning_sets = make_n_learning_set(n=20, s=30)
+    models = train_models_ridge(learning_sets, learning_algorithm, lambda_)
+    bias = []
+    variance = []
+    for x0 in np.arange(0, 2, 0.01):
+        bias.append(squared_bias_of_models_at_x(
+            learning_algorithm, models, x0, bayes(x0)))
+        variance.append(variance_of_models_at_x(
+            learning_algorithm, models, x0, bayes(x0)))
+
+    biases.append(bias)
+    variances.append(variance)
+
+
+plt.figure(23)
+for algo, variance in enumerate(variances):
+    plt.scatter(np.arange(0, 2, 0.01), variance, marker='.', linewidths=0, label=f"m=5, lambda={lambdas[algo]}")
+plt.ylim(0, 0.1)
+plt.title("Variance")
+plt.xlabel("x")
+plt.legend()
+plt.savefig("q2f_variance.pdf")
+
+
+plt.figure(24)
+for algo, bias in enumerate(biases):
+    plt.scatter(np.arange(0, 2, 0.01), bias, marker='.', linewidths=0, label=f"m=5, lambda={lambdas[algo]:.1f}")
+plt.ylim(0, 0.1)
+plt.title("Bias")
+plt.xlabel("x")
+plt.legend()
+plt.savefig("q2f_bias.pdf")
 plt.show()

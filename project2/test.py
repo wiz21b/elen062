@@ -147,6 +147,8 @@ def variance_of_models_at_x(learning_algorithm, models, x, bayes_value):
 
 biases = []
 variances = []
+expected_errors = []
+
 NB_LEARNING_SETS = 400 # seem stable 200
 X_RANGE = np.linspace(0,2,100)
 
@@ -164,6 +166,9 @@ for learning_algorithm in range(0, 5+1):
 
     biases.append(bias)
     variances.append(variance)
+    ee = np.array(bias) + np.array(variance) + experimental_residual_error
+    expected_errors.append(ee)
+
 
 # Draw biases plot
 
@@ -193,6 +198,19 @@ plt.xlabel("x")
 plt.legend()
 plt.savefig("var_d.pdf")
 
+# Draw expected error plot
+
+plt.figure(22)
+for algo, expected_error in enumerate(expected_errors):
+    plt.scatter(X_RANGE, expected_error, marker='.', linewidths=0, label=f"m={algo}")
+
+for h in [0, 0.5, 1, 1.75]:
+    plt.axvline(x=h,c='black')
+plt.title("Expected error")
+plt.ylim(0, 0.4)
+plt.xlabel("x")
+plt.legend()
+plt.savefig("exp_err_d.pdf")
 
 # Scatter plot bias versus variance
 
@@ -241,6 +259,7 @@ def train_models_ridge(learning_sets, learning_algorithm, lambda_):
 
 biases = []
 variances = []
+expected_errors = []
 
 lambdas = [x for x in np.linspace(0, 2, 5)]
 for lambda_ in lambdas:
@@ -259,26 +278,59 @@ for lambda_ in lambdas:
 
     biases.append(bias)
     variances.append(variance)
+    ee = np.array(bias) + np.array(variance) + experimental_residual_error
+    expected_errors.append(ee)
 
 
-plt.figure(23)
+plt.figure(123)
 for algo, variance in enumerate(variances):
     plt.scatter(X_RANGE, variance, marker='.', linewidths=0, label=f"m=5, lambda={lambdas[algo]}")
 plt.ylim(0, 0.1)
-plt.title("Variance")
+plt.title("Variance - Ridge regression")
 plt.xlabel("x")
 plt.legend()
 plt.savefig("q2f_variance.pdf")
 
 
-plt.figure(24)
+plt.figure(124)
 for algo, bias in enumerate(biases):
     plt.scatter(X_RANGE, bias, marker='.', linewidths=0, label=f"m=5, lambda={lambdas[algo]:.1f}")
 plt.ylim(0, 0.1)
-plt.title("Bias")
+plt.title("Bias - Ridge regression")
 plt.xlabel("x")
 plt.ylim(0, 0.02)
 plt.legend()
 plt.savefig("q2f_bias.pdf")
+
+
+# Draw expected error plot
+
+plt.figure(125)
+for algo, expected_error in enumerate(expected_errors):
+    plt.scatter(X_RANGE, expected_error, marker='.', linewidths=0, label=f"m=5, lambda={lambdas[algo]:.1f}")
+
+for h in [0, 0.5, 1, 1.75]:
+    plt.axvline(x=h,c='black')
+plt.title("Expected error - Ridge regression")
+plt.ylim(0, 0.4)
+plt.xlabel("x")
+plt.legend()
+plt.savefig("q2f_exp_err.pdf")
+
+
+# Scatter plot bias versus variance
+
+plt.figure(130)
+for algo in range(0,len(lambdas)):
+    v = np.mean(variances[algo])
+    b = np.mean(biases[algo])
+
+    plt.scatter(v,b,label=f"m=5, lambda={lambdas[algo]:.1f}")
+plt.xlabel("variance")
+plt.ylabel("bias")
+plt.title("Bias/Variance averaged on all x - Ridge regression")
+plt.legend()
+plt.savefig("q2f_bias_variance.pdf")
+
 
 plt.show()

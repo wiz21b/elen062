@@ -227,6 +227,20 @@ plt.legend()
 plt.savefig("q2d_bias_variance.pdf")
 
 
+# Mean of expected error
+
+plt.figure(27)
+for algo in range(0,5+1):
+    # Draw one at a time to have the same colors as in other graphics
+    plt.scatter([algo],
+                [np.mean(expected_errors[algo])],
+                label=f"m={algo}")
+plt.xlabel("m")
+plt.ylabel("Expected error average")
+plt.title("Expected error averaged on all x")
+plt.legend()
+plt.savefig("q2e_exp_error_avg.pdf")
+
 ######################################################################
 # # Start over with ridge regression
 

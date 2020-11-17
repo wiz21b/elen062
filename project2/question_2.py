@@ -109,6 +109,10 @@ def train_models(learning_sets, learning_algorithm):
 
         models.append(reg)
 
+    # if learning_algorithm == 5:
+    #     for m in models:
+    #         print(m.coef_)
+
     return models
 
 
@@ -206,7 +210,7 @@ for learning_algorithm in range(0, 5+1):
         predictions.append(prediction)
 
     for p in predictions:
-        plt.plot(X_RANGE2,p,c='black')
+        plt.plot(X_RANGE2,p,linewidth=0.5,c='black')
 
     plt.plot(X_RANGE2, [bayes(x) for x in X_RANGE2], c="red", label="bayes")
     plt.xlim(0, 2)

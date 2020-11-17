@@ -1,15 +1,24 @@
 import math
-import random
-from scipy.integrate import dblquad
 import numpy as np
-from math import sqrt, pi
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression, Ridge
 
+NB_LEARNING_SETS = 400
+X_RANGE = np.linspace(0, 2, 100)
+X_RANGE2 = np.linspace(0, 2, 50)
+
+# for h in [0, 0.5, 1, 1.5, 1.75, 2]:
+#     print(f"f({h})= {bayes(h)}")
+
+sigma_squared = 0.1
+
+# --------------------------------------------------------------------
+# Question 2c
+# --------------------------------------------------------------------
+# 2.c Bayes model
 
 def bayes(x):
     return -x**3 + 3*x**2 - 2*x + 1
-
 
 def truth(x, sigma_squared):
     # In numpy, scale is the standard deviation,
@@ -17,55 +26,39 @@ def truth(x, sigma_squared):
     return bayes(x) + np.random.normal(0, math.sqrt(sigma_squared))
 
 
-x0 = 10
-N = 1000
-sigma_squared = 0.1
-
-samples = np.array([truth(x0, sigma_squared) for i in range(N)])
-bayes_values = np.ones((N,)) * bayes(x0)
-
-experimental_residual_error = np.sum((samples - bayes_values)**2) / N
-
-print("experimental residual error = {:.3f}, expected = {:.3f}".format(
-    experimental_residual_error, sigma_squared))
-
-
-# 2.c Bayes model
-
-
 # Plotting Bayes model
 
 plt.figure(10)
-rng = np.arange(-2,+4,0.1)
-plt.plot(rng, [bayes(x) for x in rng])
-#plt.plot(rng, [truth(x, sigma_squared) for x in rng])
+plt.plot(X_RANGE, [bayes(x) for x in X_RANGE])
 plt.title("Bayes model")
 plt.xlabel("x")
 plt.savefig("q2c_bayes.pdf")
-#plt.show()
 
+# Computing experimental residual error on each point of [0,2]
 
 plt.figure(11)
-rng = np.arange(-2,+4,0.1)
 errors = []
-for x0 in rng:
-    samples = np.array([truth(x0, sigma_squared) for i in range(N)])
-    bayes_values = np.ones((N,)) * bayes(x0)
-    experimental_residual_error = np.sum((samples - bayes_values)**2) / N
+for x0 in X_RANGE:
+    samples_per_point = 1000
+    samples = np.array([truth(x0, sigma_squared) for i in range(samples_per_point)])
+    bayes_values = np.ones((samples_per_point,)) * bayes(x0)
+    experimental_residual_error = np.sum((samples - bayes_values)**2) / samples_per_point
     errors.append(experimental_residual_error)
 
-plt.plot(rng, errors)
+plt.plot(X_RANGE, errors)
 plt.ylim(0, sigma_squared * 1.5)
-plt.title("Experimental error")
+plt.title("Experimental error on [0,2]")
 plt.xlabel("x")
 plt.ylabel("Experimental error")
 plt.axhline(y=sigma_squared, c='black', linestyle='--', label="σ²")
 plt.legend()
 plt.savefig("q2c_error.pdf")
-#plt.show()
 
+print("Average experimental error on [0,2] = {}".format(np.mean(errors)))
 
-## 2.d
+# --------------------------------------------------------------------
+# Question 2d
+# --------------------------------------------------------------------
 
 
 def f(x):
@@ -116,59 +109,114 @@ def train_models(learning_sets, learning_algorithm):
 
         models.append(reg)
 
-
     return models
 
 
-def squared_bias_of_models_at_x(learning_algorithm, models, x, bayes_value):
-    # powers of x are needed to use the linear regression results
-    powers_of_x = np.array([[x**i for i in range(0, learning_algorithm+1)] ])
+def prediction_of_models_at_x(learning_algorithm, models, x):
+    # Return the prediction of y given x for each model of models
+    # (models of learning_algorithm complexity)
+
+    powers_of_x = np.array([[x**i for i in range(0, learning_algorithm+1)]])
 
     # Ask each model to predict its value of y
     predictions = []
     for model in models:
         predictions.append(model.predict(powers_of_x))
 
+    return np.array(predictions)
+
+
+def squared_bias_of_models_at_x(predictions, bayes_value):
     return (bayes_value - np.average(np.array(predictions)))**2
 
 
-def variance_of_models_at_x(learning_algorithm, models, x, bayes_value):
-    powers_of_x = np.array([ [x**i for i in range(0, learning_algorithm+1)] ])
-
-    # Ask each model to predict its value of y at point x
-    predictions = []
-    for model in models:
-        predictions.append(model.predict(powers_of_x))
-    predictions = np.array(predictions)
-
-    # variance is squared standard dev.
+def variance_of_models_at_x(predictions):
     return np.average((predictions - np.average(predictions))**2)
 
 
 biases = []
 variances = []
 expected_errors = []
-
-NB_LEARNING_SETS = 400 # seem stable 200
-X_RANGE = np.linspace(0,2,100)
+predictions = []
 
 for learning_algorithm in range(0, 5+1):
-    print(f"training for algo m={learning_algorithm}")
+    print(f"training for algorithm m={learning_algorithm}")
     learning_sets = make_learning_sets(NB_LEARNING_SETS)
     models = train_models(learning_sets, learning_algorithm)
+
+    print(f"Computing bias, variance,... for algorithm m={learning_algorithm} at x in [0,2]")
     bias = []
     variance = []
     for x0 in X_RANGE:
+        p = prediction_of_models_at_x(
+            learning_algorithm, models, x0)
+
         bias.append(squared_bias_of_models_at_x(
-            learning_algorithm, models, x0, bayes(x0)))
+            p, bayes(x0)))
+
         variance.append(variance_of_models_at_x(
-            learning_algorithm, models, x0, bayes(x0)))
+            p))
 
     biases.append(bias)
     variances.append(variance)
     ee = np.array(bias) + np.array(variance) + experimental_residual_error
     expected_errors.append(ee)
 
+    prediction = []
+    for x0 in X_RANGE2:
+        p = prediction_of_models_at_x(
+            learning_algorithm, models, x0)
+        prediction.append(np.average(p))
+    predictions.append(prediction)
+
+
+# Plot all average predictions, just to see how we generally
+# predict.
+
+plt.figure(99)
+for algo, prediction in enumerate(predictions):
+    plt.plot(X_RANGE2, prediction, label=f"m={algo}")
+plt.plot(X_RANGE2, [bayes(x) for x in X_RANGE2], c="black", label="bayes")
+
+for h in [0, 0.5, 1, 1.75]:
+    #print(f"f({h})= {bayes(h)}")
+    plt.axvline(x=h,c='black')
+plt.title("prediction")
+plt.xlabel("x")
+plt.legend()
+
+
+# Let's plot all models of a given complexity
+# To see how the fitting goes on
+
+learning_sets = make_learning_sets(NB_LEARNING_SETS)
+for learning_algorithm in range(0, 5+1):
+
+    plt.figure(980+learning_algorithm)
+    models = train_models(learning_sets, learning_algorithm)[0:50]
+
+    predictions = []
+    for model in models:
+        prediction = []
+        for x in X_RANGE2:
+            powers_of_x = np.array([[x**i for i in range(0, learning_algorithm+1)]])
+            y = model.predict(powers_of_x)
+            prediction.append(y)
+
+        predictions.append(prediction)
+
+    for p in predictions:
+        plt.plot(X_RANGE2,p,c='black')
+
+    plt.plot(X_RANGE2, [bayes(x) for x in X_RANGE2], c="red", label="bayes")
+    plt.xlim(0, 2)
+    plt.ylim(0, +2)
+    plt.legend()
+    plt.title(f"Generation of models for m={learning_algorithm}")
+    plt.savefig(f"q2d_fit_{learning_algorithm}.pdf")
+
+
+plt.show()
 
 # Draw biases plot
 
@@ -193,7 +241,7 @@ for algo, variance in enumerate(variances):
 for h in [0, 0.5, 1, 1.75]:
     plt.axvline(x=h,c='black')
 plt.title("Variance")
-plt.ylim(0, sigma_squared * 1.1)
+plt.ylim(0, 0.06)
 plt.xlabel("x")
 plt.legend()
 plt.savefig("var_d.pdf")
@@ -211,6 +259,12 @@ plt.ylim(0, 0.4)
 plt.xlabel("x")
 plt.legend()
 plt.savefig("exp_err_d.pdf")
+
+
+# --------------------------------------------------------------------
+# Question 2e
+# --------------------------------------------------------------------
+# (reusing previous protocol execution results)
 
 # Scatter plot bias versus variance
 
@@ -241,8 +295,11 @@ plt.title("Expected error averaged on all x")
 plt.legend()
 plt.savefig("q2e_exp_error_avg.pdf")
 
-######################################################################
-# # Start over with ridge regression
+# --------------------------------------------------------------------
+# Question 2f
+# --------------------------------------------------------------------
+
+# Start over with ridge regression
 
 def train_models_ridge(learning_sets, learning_algorithm, lambda_):
     # Use the algorithm number learning_algorithm to train models over
@@ -285,13 +342,18 @@ for lambda_ in lambdas:
     bias = []
     variance = []
     for x0 in X_RANGE:
+        p = prediction_of_models_at_x(
+            learning_algorithm, models, x0)
+
         bias.append(squared_bias_of_models_at_x(
-            learning_algorithm, models, x0, bayes(x0)))
+            p, bayes(x0)))
+
         variance.append(variance_of_models_at_x(
-            learning_algorithm, models, x0, bayes(x0)))
+            p))
 
     biases.append(bias)
     variances.append(variance)
+
     ee = np.array(bias) + np.array(variance) + experimental_residual_error
     expected_errors.append(ee)
 
@@ -299,7 +361,7 @@ for lambda_ in lambdas:
 plt.figure(123)
 for algo, variance in enumerate(variances):
     plt.scatter(X_RANGE, variance, marker='.', linewidths=0, label=f"m=5, lambda={lambdas[algo]}")
-plt.ylim(0, 0.1)
+plt.ylim(0, 0.04)
 plt.title("Variance - Ridge regression")
 plt.xlabel("x")
 plt.legend()
@@ -309,10 +371,9 @@ plt.savefig("q2f_variance.pdf")
 plt.figure(124)
 for algo, bias in enumerate(biases):
     plt.scatter(X_RANGE, bias, marker='.', linewidths=0, label=f"m=5, lambda={lambdas[algo]:.1f}")
-plt.ylim(0, 0.1)
+plt.ylim(0, 0.01)
 plt.title("Bias - Ridge regression")
 plt.xlabel("x")
-plt.ylim(0, 0.02)
 plt.legend()
 plt.savefig("q2f_bias.pdf")
 
@@ -326,7 +387,7 @@ for algo, expected_error in enumerate(expected_errors):
 for h in [0, 0.5, 1, 1.75]:
     plt.axvline(x=h,c='black')
 plt.title("Expected error - Ridge regression")
-plt.ylim(0, 0.4)
+plt.ylim(0.1, 0.2)
 plt.xlabel("x")
 plt.legend()
 plt.savefig("q2f_exp_err.pdf")

@@ -12,6 +12,7 @@ from scipy import sparse
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.utils import check_random_state
 from sklearn import svm
+from sklearn.ensemble import RandomForestClassifier
 @contextmanager
 def measure_time(label):
     """
@@ -56,6 +57,8 @@ def same_team_(sender,player_j):
     else:
         return int(player_j > 11)
 
+
+#Remark: added time since start to pairs
 def make_pair_of_players(X_, y_=None):
     n_ = X_.shape[0]
     pair_feature_col = ["sender", "x_sender", "y_sender", "player_j", "x_j", "y_j","time_start", "same_team"]
@@ -87,6 +90,8 @@ def compute_distance_(X_):
     d = np.sqrt((X_["x_sender"]-X_["x_j"])**2 + (X_["y_sender"]-X_["y_j"])**2)
     return d
 
+
+#compute distance to goal of receiving player
 def compute_distance_to_goal(X_):
     d = np.zeros((X_.shape[0],))
 
@@ -189,9 +194,19 @@ if __name__ == '__main__':
     X_features = X_LS_pairs[["distance", "same_team","distance_to_goal","time_start"]]
     #print(X_features)
     #time.sleep(10)
+    
     # Build the model
-    model = DecisionTreeClassifier()
-
+    
+    #DecisionTree
+    #model = DecisionTreeClassifier()
+    
+    #SVM approach
+    #model = svm.SVC(decision_function_shape='ovr', probability=True)
+    
+    #Random Forests
+    model = RandomForestClassifier(max_depth=10, random_state=0)
+    
+    
     with measure_time('Training'):
         print('Training...')
         model.fit(X_features, y_LS_pairs)
@@ -211,22 +226,24 @@ if __name__ == '__main__':
     # Predict
     y_pred = model.predict_proba(X_TS_features)[:,1]
 
+
     # Deriving probas
     probas = y_pred.reshape(X_TS.shape[0], 22)
 
     # Estimated score of the model
-    predicted_score = 0.01 # it is quite logical...
+    predicted_score = 0.11 # wild guesss
 
     # Making the submission file
-    fname = write_submission(probas=probas, estimated_score=predicted_score, file_name="toy_example_probas")
+    fname = write_submission(probas=probas, estimated_score=predicted_score, file_name="rand_forest_probas")
     print('Submission file "{}" successfully written'.format(fname))
 
+    #seems unnecessary to me
     # -------------------------- Random Prediction -------------------------- #
 
-    random_state = 0
-    random_state = check_random_state(random_state)
-    predictions = random_state.choice(np.arange(1,23), size=X_TS.shape[0], replace=True)
+    #random_state = 0
+    #random_state = check_random_state(random_state)
+    #predictions = random_state.choice(np.arange(1,23), size=X_TS.shape[0], replace=True)
 
-    fname = write_submission(predictions=predictions, estimated_score=predicted_score, file_name="toy_example_predictions")
-    print('Submission file "{}" successfully written'.format(fname))
+   # fname = write_submission(predictions=predictions, estimated_score=predicted_score, file_name="toy_example_predictions")
+   # print('Submission file "{}" successfully written'.format(fname))
 
